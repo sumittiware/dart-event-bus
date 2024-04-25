@@ -31,7 +31,7 @@ class _EventBusConsumerState extends State<EventBusConsumer> {
 
     _subscriptions = widget.eventKeys.map((eventType) {
       return EventBus.getInstance().on(eventType).listen((event) {
-        widget.onEvent(event.data.type, event);
+        widget.onEvent(eventType, event);
       });
     }).toList();
   }

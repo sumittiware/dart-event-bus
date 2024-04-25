@@ -66,7 +66,7 @@ class ReactiveContainer extends StatefulWidget implements ReactiveWidget {
   void onEvent(String event, Map<String, dynamic> data) {
     switch (event) {
       case "onColorChange":
-        state!.updateColor(data["color"] as Color);
+        this.state?.updateColor(data["color"] as Color);
         break;
     }
   }

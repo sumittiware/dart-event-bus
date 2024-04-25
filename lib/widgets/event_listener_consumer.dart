@@ -1,36 +1,37 @@
 import 'dart:async';
 
-import 'package:event_bus/event_bus.dart';
-import 'package:event_bus/event_types.dart';
-import 'package:event_bus/events_metadata.dart';
 import 'package:flutter/material.dart';
 
-class EventListenerWidget extends StatefulWidget {
-  final Widget child;
-  final List<Event> events;
-  final Function(Event, EventMetadata) onEvent;
+import 'package:event_bus/events/event_bus.dart';
+import 'package:event_bus/models/events_metadata.dart';
 
-  const EventListenerWidget({
+class EventBusConsumer extends StatefulWidget {
+  final Widget child;
+  final List<String> eventKeys;
+
+  final Function(String, EventData) onEvent;
+
+  const EventBusConsumer({
     super.key,
     required this.child,
-    required this.events,
+    required this.eventKeys,
     required this.onEvent,
   });
 
   @override
-  _EventListenerWidgetState createState() => _EventListenerWidgetState();
+  _EventBusConsumerState createState() => _EventBusConsumerState();
 }
 
-class _EventListenerWidgetState extends State<EventListenerWidget> {
+class _EventBusConsumerState extends State<EventBusConsumer> {
   late List<StreamSubscription> _subscriptions;
 
   @override
   void initState() {
     super.initState();
 
-    _subscriptions = widget.events.map((eventType) {
+    _subscriptions = widget.eventKeys.map((eventType) {
       return EventBus.getInstance().on(eventType).listen((event) {
-        widget.onEvent(eventType, event);
+        widget.onEvent(event.data.type, event);
       });
     }).toList();
   }

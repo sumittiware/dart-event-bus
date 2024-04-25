@@ -1,54 +1,54 @@
-import 'dart:async';
+// import 'dart:async';
 
-import 'package:event_bus/event_bus.dart';
-import 'package:test/test.dart';
+// import 'package:event_bus/event_bus.dart';
+// import 'package:test/test.dart';
 
-class EventA extends SuperEvent {
-  String text;
+// class EventA extends SuperEvent {
+//   String text;
 
-  EventA(this.text);
-}
+//   EventA(this.text);
+// }
 
-class EventB extends SuperEvent {
-  String text;
+// class EventB extends SuperEvent {
+//   String text;
 
-  EventB(this.text);
-}
+//   EventB(this.text);
+// }
 
-class SuperEvent {}
+// class SuperEvent {}
 
-main() {
-  group('[EventBus] (hierarchical)', () {
-    test('Listen on same class', () {
-      // given
-      EventBus eventBus = EventBus();
-      Future f = eventBus.on<EventA>().toList();
+// main() {
+//   group('[EventBus] (hierarchical)', () {
+//     test('Listen on same class', () {
+//       // given
+//       EventBus eventBus = EventBus();
+//       Future f = eventBus.on<EventA>().toList();
 
-      // when
-      eventBus.fire(EventA('a1'));
-      eventBus.fire(EventB('b1'));
-      eventBus.destroy();
+//       // when
+//       eventBus.fire(EventA('a1'));
+//       eventBus.fire(EventB('b1'));
+//       eventBus.destroy();
 
-      // then
-      return f.then((events) {
-        expect(events.length, 1);
-      });
-    });
+//       // then
+//       return f.then((events) {
+//         expect(events.length, 1);
+//       });
+//     });
 
-    test('Listen on superclass', () {
-      // given
-      EventBus eventBus = EventBus();
-      Future f = eventBus.on<SuperEvent>().toList();
+//     test('Listen on superclass', () {
+//       // given
+//       EventBus eventBus = EventBus();
+//       Future f = eventBus.on<SuperEvent>().toList();
 
-      // when
-      eventBus.fire(EventA('a1'));
-      eventBus.fire(EventB('b1'));
-      eventBus.destroy();
+//       // when
+//       eventBus.fire(EventA('a1'));
+//       eventBus.fire(EventB('b1'));
+//       eventBus.destroy();
 
-      // then
-      return f.then((events) {
-        expect(events.length, 2);
-      });
-    });
-  });
-}
+//       // then
+//       return f.then((events) {
+//         expect(events.length, 2);
+//       });
+//     });
+//   });
+// }

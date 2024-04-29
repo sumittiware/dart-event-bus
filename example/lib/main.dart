@@ -39,20 +39,68 @@ class FirstScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: EventBusConsumer(
-          eventKeys: const ["onColorChange"],
+          eventKeys: const ["color-change-key"],
           child: ReactiveContainer(),
         ),
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {
         int index = Random().nextInt(colors.length);
-        print("Fireing the event");
-        EventBus.getInstance().fire(EventData(
-          data: {
-            "color": colors[index],
-          },
-          key: 'onColorChange',
+        print("Firing  the event");
+        EventBus.getInstance().fire(Event(
+          metaData: EventMetaData(
+            event: 'onColorChange',
+            data: {
+              "color": colors[index],
+            },
+          ),
+          key: 'color-change-key',
         ));
       }),
+    );
+  }
+}
+
+class ReactiveContainer extends ReactiveWidget {
+  ReactiveContainer({super.key});
+
+  final state = _ReactiveContainerState();
+
+  @override
+  State<ReactiveContainer> createState() => state;
+
+  @override
+  void onEvent(String event, Map<String, dynamic> data) {
+    state.onEvent(event, data);
+  }
+}
+
+class _ReactiveContainerState extends State<ReactiveContainer> {
+  Color? color = Colors.red;
+
+  void onEvent(String event, Map<String, dynamic> data) {
+    print("Event received in state: $event");
+    switch (event) {
+      case "onColorChange":
+        updateColor(data["color"] as Color);
+        break;
+    }
+  }
+
+  updateColor(Color newColor) {
+    print("Changing the color");
+    setState(() {
+      color = newColor;
+      print("New color: $color");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(color);
+    return Container(
+      width: 100,
+      height: 100,
+      color: color,
     );
   }
 }

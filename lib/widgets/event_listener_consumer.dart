@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:event_bus/widgets/reactive_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:event_bus/events/event_bus.dart';
 
-class EventBusConsumer extends StatefulWidget {
+class EventBusConsumer<T> extends StatefulWidget {
   final Widget child;
   final List<String> eventKeys;
 
@@ -28,7 +29,11 @@ class _EventBusConsumerState extends State<EventBusConsumer> {
     _subscriptions = widget.eventKeys.map((eventType) {
       print("For the type of event: $eventType");
       return EventBus.getInstance().on(eventType).listen((event) {
-        (widget.child as ReactiveWidget).onEvent(event.key, event.data);
+        print("Event received: ${event.metaData.event}");
+        (widget.child as ReactiveWidget).onEvent(
+          event.metaData.event,
+          event.metaData.data,
+        );
       });
     }).toList();
   }
@@ -44,51 +49,5 @@ class _EventBusConsumerState extends State<EventBusConsumer> {
   @override
   Widget build(BuildContext context) {
     return widget.child;
-  }
-}
-
-abstract class ReactiveWidget {
-  void onEvent(String event, Map<String, dynamic> data);
-}
-
-class ReactiveContainer extends StatefulWidget implements ReactiveWidget {
-  _ReactiveContainerState? state;
-
-  ReactiveContainer({super.key});
-
-  @override
-  State<ReactiveContainer> createState() {
-    state = _ReactiveContainerState();
-    return state!;
-  }
-
-  @override
-  void onEvent(String event, Map<String, dynamic> data) {
-    switch (event) {
-      case "onColorChange":
-        this.state?.updateColor(data["color"] as Color);
-        break;
-    }
-  }
-}
-
-class _ReactiveContainerState extends State<ReactiveContainer> {
-  Color? color = Colors.red;
-
-  updateColor(Color newColor) {
-    setState(() {
-      color = newColor;
-      print("New coloe");
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print(color);
-    return Container(
-      width: 100,
-      height: 100,
-      color: color,
-    );
   }
 }

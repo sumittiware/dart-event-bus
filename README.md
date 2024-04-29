@@ -139,3 +139,8 @@ EventBus behaviorBus = EventBus.customController(BehaviorSubject());
 ## License
 
 The MIT License (MIT)
+
+
+TODO : 
+  [ ] Make the abstract and more generic 
+  [ ] Make sure that the components do not change the data on rebuilds.

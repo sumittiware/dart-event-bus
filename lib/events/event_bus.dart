@@ -7,12 +7,6 @@ import 'package:flutter/material.dart';
 // local imports
 import 'package:event_bus/models/events_metadata.dart';
 
-/*
-  Why am I here?
-  :->  To make some of the changes here to make the code more readable and understandable.
-
-*/
-
 /// Dispatches events to listeners using the Dart [Stream] API. The [EventBus]
 /// enables decoupled applications. It allows objects to interact without
 /// requiring to explicitly define listeners and keeping track of them.
@@ -43,10 +37,10 @@ class EventBus {
           sync: sync,
         );
 
-  StreamController<EventData> _streamController;
+  StreamController<Event> _streamController;
 
   /// Controller for the event bus stream.
-  StreamController<EventData> get streamController => _streamController;
+  StreamController<Event> get streamController => _streamController;
 
   /// Listens for events of Type [T] and its subtypes.
   ///
@@ -63,15 +57,15 @@ class EventBus {
   /// unpaused or canceled. So it's usually better to just cancel and later
   /// subscribe again (avoids memory leak).
   ///
-  Stream<EventData> on(String eventKey) {
+  Stream<Event> on(String eventKey) {
     return streamController.stream
         .where((event) => event.key == eventKey)
-        .cast<EventData>();
+        .cast<Event>();
   }
 
   /// Fires a new event on the event bus with the specified [event].
   ///
-  void fire(EventData event) {
+  void fire(Event event) {
     streamController.add(event);
   }
 

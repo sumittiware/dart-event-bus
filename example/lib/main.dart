@@ -74,7 +74,8 @@ class ReactiveContainer extends ReactiveWidget {
   }
 }
 
-class _ReactiveContainerState extends State<ReactiveContainer> {
+class _ReactiveContainerState extends State<ReactiveContainer>
+    with AutomaticKeepAliveClientMixin {
   Color? color = Colors.red;
 
   void onEvent(String event, Map<String, dynamic> data) {
@@ -95,7 +96,11 @@ class _ReactiveContainerState extends State<ReactiveContainer> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     print(color);
     return Container(
       width: 100,
